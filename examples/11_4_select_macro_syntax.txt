@@ -1,0 +1,48 @@
+The select! macro can be used with multiple branches, not just 2
+
+Each "branch" is a future which we have been using, but has a special syntax which will be explained below:
+
+<pattern> = <async expression> => <handler>,
+
+This is the syntax for a branch
+When the select macro is executed, ALL of the async expressions are executed...well, asynchronously
+
+The result of the async expression is then compared to its assigned pattern
+    As with all patterns, we can put '_' in place of pattern to accept ALL patterns
+    Note again that this happens for ALL the async expressions in select!
+
+If any of the async expressions match their assigned patterns, all others are ignored (they still execute in the background, their results just get ignored and the select! macro does not wait for them)
+    Note that this match check is only done AFTER the async expression is resolved
+
+The subsequent code inside of handler is then executed (for this one branch)
+
+i.e. for this code at the beginning of the section: 
+
+use tokio::sync::oneshot;
+
+#[tokio::main]
+async fn main() {
+    let (tx1, rx1) = oneshot::channel();
+    let (tx2, rx2) = oneshot::channel();
+
+    tokio::spawn(async {
+        let _ = tx1.send("one");
+    });
+
+    tokio::spawn(async {
+        let _ = tx2.send("two");
+    });
+
+    tokio::select! {
+        val = rx1 => {
+            println!("rx1 completed first with {:?}", val);
+        }
+        val = rx2 => {
+            println!("rx2 completed first with {:?}", val);
+        }
+    }
+}
+
+val will match anything (it is not a pattern like Some, _, etc.), and it will take the value within rx1/rx2
+Note how it can be used inside of the handler as well
+    Just like a match arm!
