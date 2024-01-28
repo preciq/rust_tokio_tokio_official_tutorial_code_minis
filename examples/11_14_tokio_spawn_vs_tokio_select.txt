@@ -1,0 +1,14 @@
+tokio::spawn and tokio::select! do very similar things.
+We can use both to asynchronously run multiple futures.
+There are some differences, though.
+
+With tokio::spawn, we are spawning a brand new thread (a green tokio thread which is lighter than a vanilla rust thread) and each async task technically runs in parallel (simultaneously), not concurrently
+
+By contrast, a select! runs its branches (with the async functions within) on 1 single thread
+It cycles through them, checking on each one, one at a time to see if it has resolved, but it only ever runs one at at time.
+
+select! may be more memory efficient in this regard, but it is not suitable for tasks that are computationally intensive (see the tokio tutorial video and code for more on that)
+
+Additionally, there are other differences, as discussed in these select subsections (i.e. we can borrow stuff in select! arms because everything is on the same thread; this is not possible in tokio::spawn threads)
+
+select! also has the added advantage of being able to distinguish and do something with whichever future finishes first, by default. spawn cannot do this without some additional code.
