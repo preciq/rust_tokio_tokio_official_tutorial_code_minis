@@ -89,8 +89,9 @@ async fn main() {
 
     let mut sample_stream = Interval::new();
 
-    while let Some(_) = sample_stream.next().await {
+    while let Some(a) = sample_stream.next().await {
         counter += 1;
+        println!("{:?}", a);
         println!("Stream item #{}", counter);
     }
     //asynchronously looping through the stream with while let
