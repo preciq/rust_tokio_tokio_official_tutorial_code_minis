@@ -1,0 +1,14 @@
+A stream is the asynchronous version of an iterator
+
+It can be evaluated asynchronously, and the individual elements within streams themselves may be futures
+I.e. we could store a number of API responses (which are still evaluating, ergo Futures) into a stream and process them one at a time
+    We can also add additional stuff to the stream, to be evaluated later
+
+A lot of the functions we could apply to iterators also apply to streams as well.
+
+To be able to work with streams, import the tokio-stream crate
+
+tokio-stream = "0.1.14"
+
+Note that this crate is separate because the "Stream" trait is still not fully added to vanilla rust (as of 01/31/2023)
+    This will be merged with the main tokio crate once it is

@@ -1,9 +1,8 @@
-// /*
-// Execute with:
-// cargo run --bin main
-// */
-
+/*
+Execute with:
+cargo run --bin main
+*/
 #[tokio::main]
 async fn main() {
-    
+
 }

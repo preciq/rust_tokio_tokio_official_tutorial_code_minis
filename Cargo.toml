@@ -20,3 +20,10 @@ bytes = "1"
 futures = "0.3.30"
 # has various useful libraries/functions for implementing futures in rust
 # used to create our own version of tokio, "mini-tokio", in section 10
+
+tokio-stream = "0.1.14"
+# streams crate for working with streams asynchronously in rust/tokio
+# will eventually be merged into tokio itself once the Stream trait is stabilized in the rust standard library
+
+async-stream = "0.3.5"
+# provides access to the stream! macro for simple stream creation

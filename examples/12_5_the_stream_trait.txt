@@ -1,0 +1,34 @@
+/*
+This is the stream trait: 
+
+use std::pin::Pin;
+use std::task::{Context, Poll};
+
+pub trait Stream {
+    type Item;
+
+    fn poll_next(
+        self: Pin<&mut Self>, 
+        cx: &mut Context<'_>
+    ) -> Poll<Option<Self::Item>>;
+    //unlike future, where we poll once, in a stream, we poll next, since there can be multiple futures in a stream
+    //this function lets us poll them all, one by one
+
+    //note that this will return Poll::Pending if there are no available futures within the Stream
+    //once an item is added, the waker will be called and the stream will be poll_next()'ed again
+
+    //It will return Poll::Ready(None) when the stream is completely finished and no more items will be produced.
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        (0, None)
+    }
+    //this gives a hint as to how big the stream is (as in how many elements are within the stream)
+    //note the word "hint"; streams can have things dynamically added and removed from them, so this function is supposed to give the length of the stream at a given instance
+    //this may change later
+    /*
+    The size_hint method provides an estimate of the number of items remaining in the stream, but it's not always possible to provide an accurate count. The method returns a lower and an upper bound (if known). The lower bound is guaranteed to be less than or equal to the number of items remaining, and the upper bound, if specified, is guaranteed to be greater than or equal to the number of items remaining.
+    */
+}
+
+It is very similar to the future trait, as can be seen (poll function replaced with poll_next, see above for explanation)
+*/
